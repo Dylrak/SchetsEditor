@@ -1,7 +1,0 @@
-C:\Users\Dylan\Documents\GitHub\SchetsEditor\bin\Debug\Schets.exe
-C:\Users\Dylan\Documents\GitHub\SchetsEditor\bin\Debug\Schets.pdb
-C:\Users\Dylan\Documents\GitHub\SchetsEditor\obj\x86\Debug\10g-SchetsEditor.csprojResolveAssemblyReference.cache
-C:\Users\Dylan\Documents\GitHub\SchetsEditor\obj\x86\Debug\SchetsEditor.Properties.Resources.resources
-C:\Users\Dylan\Documents\GitHub\SchetsEditor\obj\x86\Debug\10g-SchetsEditor.csproj.GenerateResource.Cache
-C:\Users\Dylan\Documents\GitHub\SchetsEditor\obj\x86\Debug\Schets.exe
-C:\Users\Dylan\Documents\GitHub\SchetsEditor\obj\x86\Debug\Schets.pdb

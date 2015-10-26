@@ -49,14 +49,12 @@ namespace SchetsEditor
                                     , new VolRechthoekTool()
                                     , new TekstTool()
                                     , new GumTool()
-                                    , new OvaalTool()
-                                    , new VolOvaalTool()
                                     };
             String[] deKleuren = { "Black", "Red", "Green", "Blue"
                                  , "Yellow", "Magenta", "Cyan" 
                                  };
 
-            this.ClientSize = new Size(700, 550);
+            this.ClientSize = new Size(700, 500);
             huidigeTool = deTools[0];
 
             schetscontrol = new SchetsControl();
@@ -178,14 +176,6 @@ namespace SchetsEditor
                 cbb.Items.Add(k);
             cbb.SelectedIndex = 0;
             paneel.Controls.Add(cbb);
-        }
-        public void Opslaan(string path)
-        {
-            schetscontrol.Opslaan(path);
-        }
-        public void Open(string path)
-        {
-            schetscontrol.Open(path);
         }
     }
 }

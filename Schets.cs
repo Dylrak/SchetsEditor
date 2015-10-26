@@ -42,13 +42,5 @@ namespace SchetsEditor
         {
             bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
         }
-        public void Opslaan(string path)
-        {
-            bitmap.Save(path, System.Drawing.Imaging.ImageFormat.Png);
-        }
-        public void Open(string path)
-        {
-            bitmap = new Bitmap(path);
-        }
     }
 }
