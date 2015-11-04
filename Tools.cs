@@ -65,6 +65,10 @@ namespace SchetsEditor
                 s.Invalidate();
             }
         }
+        public override bool Collision(SchetsControl s, int i, Point p)
+        {
+            return (p.X >= s.LayerList[i].Item3.X && p.Y >= s.LayerList[i].Item3.Y);
+        }
     }
 
     public abstract class TweepuntTool : StartpuntTool

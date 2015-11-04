@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -8,9 +9,14 @@ namespace SchetsEditor
 {   public class SchetsControl : UserControl
     {   private Schets schets;
         private Color penkleur;
-
-        public List<Tuple<ISchetsTool, Color, Point, Point, String, List<Point>>> LayerList = new List<Tuple<ISchetsTool, Color, Point, Point, String, List<Point>>>();
+        private List<Tuple<ISchetsTool, Color, Point, Point, String, List<Point>>> layerlist = new List<Tuple<ISchetsTool, Color, Point, Point, String, List<Point>>>();
         //A list containing information about each "layer", such as the tool and color used as well as beginning- and end coordinates.
+
+        public List<Tuple<ISchetsTool, Color, Point, Point, String, List<Point>>> LayerList
+        {
+            get { return layerlist; }
+            set { layerlist = value; }
+        }
         public List<Point> Scribble = new List<Point>();
         public Color PenKleur
         { get { return penkleur; }
@@ -88,11 +94,37 @@ namespace SchetsEditor
         }
         public void Opslaan(string path)
         {
-            Schets.Opslaan(path);
+            string[] cutpath = path.Split('/');
+            if (cutpath[cutpath.Length - 1] == ".sketch")
+            {
+                using (Stream stream = File.Open(path, FileMode.Create))
+                {
+                    var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    bf.Serialize(stream, LayerList);
+                }
+            }
+            else
+            {
+                Schets.Opslaan(path, this.LayerList);
+            }
         }
         public void Open(string path)
         {
-            Schets.Open(path);
+            string[] cutpath = path.Split('/');
+            if (cutpath[cutpath.Length - 1] == ".sketch")
+            {
+                using (Stream stream = File.Open(path, FileMode.Open))
+                {
+                    var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    LayerList = (List<Tuple<ISchetsTool, Color, Point, Point, string, List<Point>>>)bf.Deserialize(stream);
+                    RefreshList();
+                    this.Invalidate();
+                }
+            }
+            else
+            {
+                Schets.Open(path);
+            }
         }
     }
 }

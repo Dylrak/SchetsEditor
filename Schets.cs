@@ -45,20 +45,13 @@ namespace SchetsEditor
         {
             bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
         }
-        public void Opslaan(string path)
+        public void Opslaan(string path, List<Tuple<ISchetsTool, Color, Point, Point, String, List<Point>>> Ll)
         {
             bitmap.Save(path);
         }
         public void Open(string path)
         {
-            if (path.Contains(".sct"))
-            {
-                //open project file.
-            }
-            else
-            {
-                bitmap = new Bitmap(path);
-            }
+            bitmap = new Bitmap(path);
         }
     }
 }

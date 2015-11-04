@@ -70,7 +70,7 @@ namespace SchetsEditor
             if (s != null)
             {
                 SaveFileDialog save = new SaveFileDialog();
-                save.Filter = "JPEG-image|*.jpg|PNG-image|*.png|BMP-image|*.bmp";
+                save.Filter = "JPEG-image|*.jpg|PNG-image|*.png|BMP-image|*.bmp|Project-file|*.sketch";
                 save.FileName = "*.jpg";
                 if (save.ShowDialog() == DialogResult.OK)
                 {
@@ -80,12 +80,12 @@ namespace SchetsEditor
         }
         private void open(object sender, EventArgs e)
         {
-            s = new SchetsWin();
-            s.MdiParent = this;
             OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "JPEG-image|*.jpg|PNG-image|*.png|BMP-image|*.bmp|Project-file|*.sct";
+            open.Filter = "JPEG-image|*.jpg|PNG-image|*.png|BMP-image|*.bmp|Project-file|*.sketch";
             if (open.ShowDialog() == DialogResult.OK)
             {
+                s = new SchetsWin();
+                s.MdiParent = this;
                 s.Open(open.FileName);
             }
             s.Show();
