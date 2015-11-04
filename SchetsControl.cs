@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -8,8 +9,12 @@ namespace SchetsEditor
     {   private Schets schets;
         private Color penkleur;
 
+        public List<Tuple<ISchetsTool, Color, Point, Point, String, List<Point>>> LayerList = new List<Tuple<ISchetsTool, Color, Point, Point, String, List<Point>>>();
+        //A list containing information about each "layer", such as the tool and color used as well as beginning- and end coordinates.
+        public List<Point> Scribble = new List<Point>();
         public Color PenKleur
         { get { return penkleur; }
+          set { penkleur = value; }
         }
         public Schets Schets
         { get { return schets;   }
@@ -25,11 +30,31 @@ namespace SchetsEditor
         {
         }
         private void teken(object o, PaintEventArgs pea)
-        {   schets.Teken(pea.Graphics);
+        {
+            schets.Teken(pea.Graphics);
         }
         private void veranderAfmeting(object o, EventArgs ea)
         {   schets.VeranderAfmeting(this.ClientSize);
             this.Invalidate();
+        }
+        public void RefreshList()
+        {
+            schets.Schoon();
+            foreach (Tuple<ISchetsTool, Color, Point, Point, String, List<Point>> Layer in LayerList) 
+            {
+                PenKleur = Layer.Item2;
+                if (Layer.Item1.GetType() == typeof(PenTool))
+                {
+                    for (int i = 0; i < Layer.Item6.Count - 1; i++)
+                    {
+                        Layer.Item1.Compleet(this, MaakBitmapGraphics(), Layer.Item6[i], Layer.Item6[i+1]);
+                    }
+                }
+                else
+                {
+                    Layer.Item1.Compleet(this, MaakBitmapGraphics(), Layer.Item3, Layer.Item4);
+                }
+            }
         }
         public Graphics MaakBitmapGraphics()
         {   Graphics g = schets.BitmapGraphics;
@@ -37,13 +62,21 @@ namespace SchetsEditor
             return g;
         }
         public void Schoon(object o, EventArgs ea)
-        {   schets.Schoon();
-            this.Invalidate();
+        {
+            DialogResult dr = MessageBox.Show("Weet je zeker dat je het scherm wilt opschonen?", "Schets editor", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+                schets.Schoon();
+                LayerList.Clear();
+                this.Invalidate();
+            }
         }
         public void Roteer(object o, EventArgs ea)
-        {   schets.VeranderAfmeting(new Size(this.ClientSize.Height, this.ClientSize.Width));
-            schets.Roteer();
-            this.Invalidate();
+        {
+            RefreshList();
+            //schets.VeranderAfmeting(new Size(this.ClientSize.Height, this.ClientSize.Width));
+            //schets.Roteer();
+            //this.Invalidate();
         }
         public void VeranderKleur(object obj, EventArgs ea)
         {   string kleurNaam = ((ComboBox)obj).Text;

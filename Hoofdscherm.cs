@@ -83,7 +83,7 @@ namespace SchetsEditor
             s = new SchetsWin();
             s.MdiParent = this;
             OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "JPEG-image|*.jpg|PNG-image|*.png|BMP-image|*.bmp";
+            open.Filter = "JPEG-image|*.jpg|PNG-image|*.png|BMP-image|*.bmp|Project-file|*.sct";
             if (open.ShowDialog() == DialogResult.OK)
             {
                 s.Open(open.FileName);

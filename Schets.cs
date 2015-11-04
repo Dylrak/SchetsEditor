@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace SchetsEditor
 {
@@ -31,6 +33,7 @@ namespace SchetsEditor
         }
         public void Teken(Graphics gr)
         {
+            gr.Clear(Color.White);
             gr.DrawImage(bitmap, 0, 0);
         }
         public void Schoon()
@@ -44,11 +47,18 @@ namespace SchetsEditor
         }
         public void Opslaan(string path)
         {
-            bitmap.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+            bitmap.Save(path);
         }
         public void Open(string path)
         {
-            bitmap = new Bitmap(path);
+            if (path.Contains(".sct"))
+            {
+                //open project file.
+            }
+            else
+            {
+                bitmap = new Bitmap(path);
+            }
         }
     }
 }

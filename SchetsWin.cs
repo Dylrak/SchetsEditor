@@ -14,6 +14,8 @@ namespace SchetsEditor
         ISchetsTool huidigeTool;
         Panel paneel;
         bool vast;
+        Point beginLocation;
+        
         ResourceManager resourcemanager
             = new ResourceManager("SchetsEditor.Properties.Resources"
                                  , Assembly.GetExecutingAssembly()
@@ -56,6 +58,8 @@ namespace SchetsEditor
                                  , "Yellow", "Magenta", "Cyan" 
                                  };
 
+            String text = "";
+
             this.ClientSize = new Size(700, 550);
             huidigeTool = deTools[0];
 
@@ -63,19 +67,52 @@ namespace SchetsEditor
             schetscontrol.Location = new Point(64, 10);
             schetscontrol.MouseDown += (object o, MouseEventArgs mea) =>
                                        {   vast=true;  
-                                           huidigeTool.MuisVast(schetscontrol, mea.Location); 
+                                           huidigeTool.MuisVast(schetscontrol, mea.Location);
+                                           beginLocation = mea.Location;
                                        };
             schetscontrol.MouseMove += (object o, MouseEventArgs mea) =>
                                        {   if (vast)
                                            huidigeTool.MuisDrag(schetscontrol, mea.Location); 
                                        };
             schetscontrol.MouseUp   += (object o, MouseEventArgs mea) =>
-                                       {   if (vast)
-                                           huidigeTool.MuisLos (schetscontrol, mea.Location);
-                                           vast = false; 
+                                       {
+                                           if (vast)
+                                           {
+                                               if (huidigeTool.GetType() != typeof(TekstTool))
+                                               {
+                                                   schetscontrol.LayerList.Add(Tuple.Create(
+                                                       huidigeTool,
+                                                       schetscontrol.PenKleur,
+                                                       beginLocation,
+                                                       mea.Location,
+                                                       text,
+                                                       new List<Point>(schetscontrol.Scribble)));
+                                               }
+                                               huidigeTool.MuisLos(schetscontrol, mea.Location);
+                                               schetscontrol.Scribble.Clear();
+                                               vast = false;
+                                           }
                                        };
             schetscontrol.KeyPress +=  (object o, KeyPressEventArgs kpea) => 
-                                       {   huidigeTool.Letter  (schetscontrol, kpea.KeyChar); 
+                                       {
+                                           if (huidigeTool.GetType() == typeof(TekstTool))
+                                           {
+                                               if (kpea.KeyChar == (char)13) //Enter
+                                               {
+                                                   schetscontrol.LayerList.Add(Tuple.Create(huidigeTool, 
+                                                       schetscontrol.PenKleur, 
+                                                       beginLocation, 
+                                                       new Point(0, 0), 
+                                                       text, 
+                                                       new List<Point>()));
+                                                   text = "";
+                                               }
+                                               else
+                                               {
+                                                   text += kpea.KeyChar;
+                                               }
+                                           }
+                                           huidigeTool.Letter(schetscontrol, kpea.KeyChar);
                                        };
             this.Controls.Add(schetscontrol);
 
